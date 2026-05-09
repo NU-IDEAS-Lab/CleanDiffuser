@@ -98,7 +98,7 @@ class BaseDiffusionSDE(DiffusionModel):
         else:
             loss = (self.model["diffusion"](xt, t, condition) - x0) ** 2
 
-        return (loss * self.loss_weight * (1 - self.fix_mask)).mean()
+        return (loss * self.loss_weight * (1 - self.fix_mask)).sum() / (1 - self.fix_mask).sum().clamp_min(1.0)
 
     # ==================== Sampling: Solving SDE/ODE ======================
 
